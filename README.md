@@ -1,4 +1,40 @@
-# Laravel API Project Documentation
+# **Flutter**
+
+## Setup
+1. Clone the repository:
+  ```bash
+  git clone https://github.com/Wambuku/Quantic-Tech.git
+  ```
+
+2. Change to the project directory:
+  ```bash
+  cd Quantic-Tech
+  ```
+  ```bash
+  cd frontend_ui
+  ```
+
+3. Install dependencies:
+  ```bash
+  flutter pub get
+  ```
+
+## Run the App
+1. Connect a device or start an emulator.
+
+2. Run the app:
+  ```bash
+  flutter run
+  ```
+
+  This will build and run the app on the connected device or emulator.
+
+## Build the App
+To build a release version of the app, use the following command:
+
+
+
+# **Laravel API Project Documentation**
 
 ## Table of Contents
 
