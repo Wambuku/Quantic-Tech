@@ -7,6 +7,8 @@ use App\Models\OrderProduct;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use SmoDav\Mpesa\STK;
+use App\Mail\OrderStatusChanged;
+use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
@@ -79,6 +81,9 @@ class OrderController extends Controller
         $order = Order::findOrFail($id);
         $order->update($request->only('status'));
 
+        // Send email notification
+        Mail::to($order->customer->email)->send(new OrderStatusChanged($order));
+
         return $order->load('customer', 'products');
     }
 
@@ -90,8 +95,20 @@ class OrderController extends Controller
         return response()->json(null, 204);
     }
 
-    //search and filter implementation 
+    //Generating invoices 
 
+    
+    public function generateInvoice($id)
+    {
+        $order = Order::with('customer', 'products')->findOrFail($id);
+
+        $pdf = PDF::loadView('invoices.order', compact('order'));
+
+        return $pdf->download('invoice_' . $order->id . '.pdf');
+    }
+
+
+    // Search and filter implementation
     public function search(Request $request)
     {
         $query = Order::query();
@@ -115,3 +132,4 @@ class OrderController extends Controller
         return $query->get();
     }
 }
+

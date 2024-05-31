@@ -32,7 +32,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('orders/search', [OrderController::class, 'search']);
     
     Route::get('dashboard', [DashboardController::class, 'index']);
-
+    Route::get('orders/{id}/invoice', [OrderController::class, 'generateInvoice']);
     Route::apiResource('customers', CustomerController::class);
     Route::apiResource('products', ProductController::class);
     Route::apiResource('orders', OrderController::class);
