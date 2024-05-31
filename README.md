@@ -10,6 +10,9 @@
   ```bash
   cd Quantic-Tech
   ```
+  ```bash
+  cd frontend_ui
+  ```
 
 3. Install dependencies:
   ```bash
