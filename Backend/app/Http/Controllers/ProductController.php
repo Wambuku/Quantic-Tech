@@ -1,6 +1,5 @@
 <?php
 
-// app/Http/Controllers/ProductController.php
 
 namespace App\Http\Controllers;
 
@@ -17,13 +16,20 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required',
-            'description' => 'required',
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
             'price' => 'required|numeric',
             'quantity' => 'required|integer',
         ]);
 
-        return Product::create($request->all());
+        $product = Product::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'price' => $request->price,
+            'quantity' => $request->quantity,
+        ]);
+
+        return response()->json($product, 201);
     }
 
     public function show($id)
@@ -34,16 +40,16 @@ class ProductController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => 'required',
-            'description' => 'required',
-            'price' => 'required|numeric',
-            'quantity' => 'required|integer',
+            'name' => 'sometimes|required|string|max:255',
+            'description' => 'sometimes|required|string',
+            'price' => 'sometimes|required|numeric',
+            'quantity' => 'sometimes|required|integer',
         ]);
 
         $product = Product::findOrFail($id);
         $product->update($request->all());
 
-        return $product;
+        return response()->json($product);
     }
 
     public function destroy($id)
@@ -53,4 +59,32 @@ class ProductController extends Controller
 
         return response()->json(null, 204);
     }
+
+     //search and filter implementation 
+
+    public function search(Request $request)
+    {
+        $query = Product::query();
+
+        if ($request->has('name')) {
+            $query->where('name', 'LIKE', '%' . $request->name . '%');
+        }
+
+        if ($request->has('description')) {
+            $query->where('description', 'LIKE', '%' . $request->description . '%');
+        }
+
+        if ($request->has('price_min')) {
+            $query->where('price', '>=', $request->price_min);
+        }
+
+        if ($request->has('price_max')) {
+            $query->where('price', '<=', $request->price_max);
+        }
+
+        return $query->get();
+    }
 }
+
+   
+

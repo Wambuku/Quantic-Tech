@@ -53,5 +53,29 @@ class CustomerController extends Controller
 
         return response()->json(null, 204);
     }
+//search and filter function implementation 
+
+    public function search(Request $request)
+    {
+        $query = Customer::query();
+
+        if ($request->has('name')) {
+            $query->where('name', 'LIKE', '%' . $request->name . '%');
+        }
+        
+        if ($request->has('email')) {
+            $query->where('email', 'LIKE', '%' . $request->email . '%');
+        }
+
+        if ($request->has('phone')) {
+            $query->where('phone', 'LIKE', '%' . $request->phone . '%');
+        }
+
+        if ($request->has('address')) {
+            $query->where('address', 'LIKE', '%' . $request->address . '%');
+        }
+
+        return $query->get();
+    }
 }
 

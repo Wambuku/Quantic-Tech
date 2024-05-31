@@ -89,4 +89,29 @@ class OrderController extends Controller
 
         return response()->json(null, 204);
     }
+
+    //search and filter implementation 
+
+    public function search(Request $request)
+    {
+        $query = Order::query();
+
+        if ($request->has('customer_id')) {
+            $query->where('customer_id', $request->customer_id);
+        }
+
+        if ($request->has('status')) {
+            $query->where('status', 'LIKE', '%' . $request->status . '%');
+        }
+
+        if ($request->has('total_amount_min')) {
+            $query->where('total_amount', '>=', $request->total_amount_min);
+        }
+
+        if ($request->has('total_amount_max')) {
+            $query->where('total_amount', '<=', $request->total_amount_max);
+        }
+
+        return $query->get();
+    }
 }
